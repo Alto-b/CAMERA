@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:camera_app/settings.dart';
 import 'package:flutter/material.dart';
 
 import 'gallery_screen.dart';
@@ -20,33 +21,30 @@ class CameraScreen extends StatefulWidget {
 
 class _CameraScreenState extends State<CameraScreen> {
   @override
-  void initState() {
+  
+  void initState() {          //perform one time initialization tasks
     initializeCamera(selectedCamera); 
     super.initState();
   }
 
   late CameraController _controller; 
     late Future<void>
-      _initializeControllerFuture; 
-  int selectedCamera = 0;
-  List<File> capturedImages = [];
+      _initializeControllerFuture; //to ensure camera is initialized properly before use
+  int selectedCamera = 0; //0-rear 1-front camera
+  List<File> capturedImages = []; //to store pics
 
   initializeCamera(int cameraIndex) async {
     _controller = CameraController(
-      
-      widget.cameras[cameraIndex],
-      
-      ResolutionPreset.medium,
+      widget.cameras[cameraIndex], //identify camera
+      ResolutionPreset.max, //camera quality
     );
-
-   
     _initializeControllerFuture = _controller.initialize();
   }
 
   @override
   void dispose() {
     
-    _controller.dispose();
+    _controller.dispose();//ensures camera is properly closed
     super.dispose();
   }
 
@@ -56,22 +54,29 @@ class _CameraScreenState extends State<CameraScreen> {
       backgroundColor: Colors.black,
       body: Column(
         children: [
+          //appbar
           AppBar(
             backgroundColor: Colors.transparent,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(onPressed: (){}, icon:Icon(Icons.center_focus_strong_outlined)),
+                //flash start
                 IconButton(onPressed: (){}, icon:Icon(Icons.flash_off_outlined)),
+                
+                //flash end
                 IconButton(onPressed: (){}, icon:Icon(Icons.hdr_on_rounded)),
                 IconButton(onPressed: (){}, icon:Icon(Icons.macro_off_rounded)),
-                IconButton(onPressed: (){}, icon:Icon(Icons.settings)),               
+                IconButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder:(context) => Settingspage(),));
+                }, icon:Icon(Icons.settings)),               
               ],
             ),
           ),
-        
+          //preview container
+          // ignore: sized_box_for_whitespace   
           Container(
-             height: MediaQuery.of(context).size.height * 0.8,
+             height: MediaQuery.of(context).size.height * 0.8,//80%
             child: FutureBuilder<void>(
               future: _initializeControllerFuture,
               builder: (context, snapshot) {
@@ -85,7 +90,8 @@ class _CameraScreenState extends State<CameraScreen> {
               },
             ),
           ),
-          Spacer(),
+          Spacer(), 
+           //for camera switch
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
@@ -95,7 +101,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   onPressed: () {
                     if (widget.cameras.length > 1) {
                       setState(() {
-                        selectedCamera = selectedCamera == 0 ? 1 : 0;
+                        selectedCamera = selectedCamera == 1 ? 0 : 1;
                         initializeCamera(selectedCamera);
                       });
                     } else {
@@ -105,8 +111,9 @@ class _CameraScreenState extends State<CameraScreen> {
                       ));
                     }
                   },
-                  icon: Icon(Icons.switch_camera_rounded, color: Colors.white),
+                  icon: Icon(Icons.restart_alt, color: Colors.white,size: 40,),
                 ),
+                //for capture
                 GestureDetector(
                   onTap: () async {
                     await _initializeControllerFuture;
@@ -122,18 +129,22 @@ class _CameraScreenState extends State<CameraScreen> {
                       shape: BoxShape.circle,
                       color: Colors.white,
                     ),
+                    child: Icon(Icons.camera,size: 40,),
                   ),
                 ),
+                //for gallery
                 GestureDetector(
                   onTap: () {
-                    if (capturedImages.isEmpty) return;
-                    Navigator.push(
+                    if (capturedImages.isEmpty) return;//if no images
+                    Navigator.push(//if images
                         context,
                         MaterialPageRoute(
                             builder: (context) => GalleryScreen(
-                                images: capturedImages.reversed.toList())));
+                                images: capturedImages.reversed.toList()//insert in reverse
+                                )
+                                ));
                   },
-                  child: Container(
+                  child: Container(//gallery icon...
                     height: 60,
                     width: 60,
                     decoration: BoxDecoration(
@@ -149,8 +160,9 @@ class _CameraScreenState extends State<CameraScreen> {
               ],
             ),
           ),
-          Spacer(),
-        ],
+       Spacer(),
+       
+        ], 
       ),
     );
   }
