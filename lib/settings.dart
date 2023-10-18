@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Settingspage extends StatefulWidget {
   const Settingspage({super.key});
@@ -8,10 +11,15 @@ class Settingspage extends StatefulWidget {
 }
 
 class _SettingspageState extends State<Settingspage> {
+  
+     bool val1=false;//for switch1
+      bool val2=false;//for switch2
+       bool val3=false;//for switch3
+
   @override
   Widget build(BuildContext context) {
 
-     bool val=false;//for switch
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -39,12 +47,12 @@ class _SettingspageState extends State<Settingspage> {
             const SizedBox(height: 10,),
             ListTile(
               title: const Text("Shutter Sound",style: TextStyle(color: Colors.white),),
-              trailing:Switch(value: val, onChanged: (value) {
+              trailing:Switch(value: val1, onChanged: (value) {
                         setState(() {
-                          if(val==false){
-                            val=true;
+                          if(val1==false){
+                            val1=true;
                           }else{
-                            val=false;
+                            val1=false;
                           }
                         });
                       },
@@ -60,12 +68,12 @@ class _SettingspageState extends State<Settingspage> {
                     style: TextStyle(color: Color.fromARGB(255, 111, 110, 110),fontSize: 13),),
                 ],
               ),
-              trailing:Switch(value: val, onChanged: (value) {
+              trailing:Switch(value: val2, onChanged: (value) {
                         setState(() {
-                          if(val==false){
-                            val=true;
+                          if(val2==false){
+                            val2=true;
                           }else{
-                            val=false;
+                            val2=false;
                           }
                         });
                       },
@@ -81,16 +89,16 @@ class _SettingspageState extends State<Settingspage> {
                     style: TextStyle(color: Color.fromARGB(255, 111, 110, 110),fontSize: 13),),
                 ],
               ),
-              trailing:Switch(value: val, onChanged: (value) {
+              trailing:Switch(value: val3, onChanged: (value) {
                         setState(() {
-                          if(val==false){
-                            val=true;
+                          if(val3==false){
+                            val3=true;
                           }else{
-                            val=false;
+                            val3=false;
                           }
                         });
                       },
-                      inactiveTrackColor: Color.fromARGB(255, 103, 103, 103),)
+                      inactiveTrackColor: const Color.fromARGB(255, 103, 103, 103),)
             ),
             const SizedBox(height: 20,),
              const ListTile(
@@ -102,15 +110,6 @@ class _SettingspageState extends State<Settingspage> {
                     style: TextStyle(color: Color.fromARGB(255, 111, 110, 110),fontSize: 13),),
                 ],
               ),
-              // trailing:Switch(value: val, onChanged: (value) {
-              //           setState(() {
-              //             if(val==false){
-              //               val=true;
-              //             }else{
-              //               val=false;
-              //             }
-              //           });
-              //         },)
             ),
             const SizedBox(height: 20,),
             const ListTile(
@@ -118,19 +117,9 @@ class _SettingspageState extends State<Settingspage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Keep settings",style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),),
-                  // Text("The micro gimbal helps satbilize the phone when shooting with the rear camera ",
-                  //   style: TextStyle(color: Color.fromARGB(255, 111, 110, 110),fontSize: 13),),
                 ],
               ),
-              // trailing:Switch(value: val, onChanged: (value) {
-              //           setState(() {
-              //             if(val==false){
-              //               val=true;
-              //             }else{
-              //               val=false;
-              //             }
-              //           });
-              //         },)
+             
             ),const SizedBox(height: 20,),
             const ListTile(
               title: Column(
@@ -143,8 +132,6 @@ class _SettingspageState extends State<Settingspage> {
               ),
           
             ),
-            const Spacer(),
-          
             const Padding(
               padding: EdgeInsets.all(17.0),
               child: Column(
@@ -156,12 +143,23 @@ class _SettingspageState extends State<Settingspage> {
                 ],
               ),
             ),
-            const SizedBox(height: 20,),
+            //const SizedBox(height: 20,),
+             const Spacer(),
+             //reset button
             Row(
               mainAxisAlignment:MainAxisAlignment.center,
               children: [
-                ElevatedButton(onPressed: (){}, child: const Text("RESET"),
-                 
+                ElevatedButton(onPressed: (){
+                  setState(() {
+                    val1=false;
+                    val2=false;
+                    val3=false;
+                  });
+                },
+                 style: ButtonStyle(backgroundColor:MaterialStatePropertyAll<Color>(Color.fromARGB(255, 104, 103, 103)),
+                 shape: MaterialStatePropertyAll<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))) ), 
+                 child: const Text("RESET"),
+
                   ),
               ],
             ),

@@ -20,6 +20,10 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
+
+  FlashMode flashMode = FlashMode.off; // Initialize with flash off
+
+
   @override
   
   void initState() {          //perform one time initialization tasks
@@ -62,8 +66,19 @@ class _CameraScreenState extends State<CameraScreen> {
               children: [
                 IconButton(onPressed: (){}, icon:Icon(Icons.center_focus_strong_outlined)),
                 //flash start
-                IconButton(onPressed: (){}, icon:Icon(Icons.flash_off_outlined)),
-                
+                //IconButton(onPressed: (){}, icon:Icon(Icons.flash_off_outlined)),
+                IconButton(
+  onPressed: () {
+    setState(() {
+      flashMode = flashMode == FlashMode.off ? FlashMode.torch : FlashMode.off;
+      _controller.setFlashMode(flashMode);
+    });
+  },
+  icon: Icon(
+    flashMode == FlashMode.torch ? Icons.flash_on : Icons.flash_off_outlined,
+  ),
+),
+
                 //flash end
                 IconButton(onPressed: (){}, icon:Icon(Icons.hdr_on_rounded)),
                 IconButton(onPressed: (){}, icon:Icon(Icons.macro_off_rounded)),
